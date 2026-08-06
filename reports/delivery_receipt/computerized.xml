@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="delivery_receipt_computerized">
+
+        <div class="page"
+             style="font-family:Arial, Helvetica, sans-serif;
+                    font-size:9.5px;
+                    color:#000;">
+
+            <t t-set="p" t-value="docs[0]"/>
+            <t t-set="company" t-value="p.company_id"/>
+            <t t-set="cp" t-value="company.partner_id"/>
+            <t t-set="partner" t-value="p.partner_id"/>
+
+            <!-- ================= HEADER ================= -->
+
+            <table style="width:100%; border-collapse:collapse;">
+
+                <tr>
+
+                    <td style="width:40%; vertical-align:top;">
+
+                        <img t-if="company.logo"
+                             t-att-src="image_data_uri(company.logo)"
+                             style="max-height:50px;"/>
+
+                        <div style="font-size:14px;font-weight:bold;">
+                            <span t-esc="company.name"/>
+                        </div>
+
+                        <div>
+                            <span t-esc="cp.street or ''"/>
+                            <t t-if="cp.street2">
+                                , <span t-esc="cp.street2"/>
+                            </t>
+                        </div>
+
+                        <div>
+                            <span t-esc="cp.city or ''"/>
+                            <t t-if="cp.state_id">
+                                , <span t-esc="cp.state_id.name"/>
+                            </t>
+                        </div>
+
+                        <div>
+                            Tel No. :
+                            <span t-esc="cp.phone or ''"/>
+                        </div>
+
+                        <div>
+                            Mobile No. :
+                            <span t-esc="cp.phone or ''"/>
+                        </div>
+
+                        <div>
+                            VAT REG. TIN :
+                            <span t-esc="cp.vat or ''"/>
+                        </div>
+
+                    </td>
+
+                    <td style="width:60%; vertical-align:top;">
+
+                        <div style="text-align:right;">
+                            No. :
+                            <span t-esc="p.name"/>
+                        </div>
+
+                        <div style="
+                            text-align:center;
+                            font-size:18px;
+                            font-weight:bold;
+                            margin-top:55px;">
+
+                            DELIVERY RECEIPT
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                
+
+            </table>
+
+            <hr style="border-top:1px solid #000; margin:6px 0;"/>
+
+            <!-- ================= CUSTOMER ================= -->
+
+            <table style="width:100%; border-collapse:collapse;">
+
+                <tr>
+
+                    <td style="width:55%; vertical-align:top;">
+
+                        <div>
+                            Delivered to:
+                            <span t-esc="partner.name"/>
+                        </div>
+
+                        <div>
+                            TIN:
+                            <span t-esc="partner.vat or ''"/>
+                        </div>
+
+                        <div>
+                            Address:
+                            <span t-esc="partner.contact_address or ''"/>
+                        </div>
+
+                    </td>
+
+                    <td style="width:45%; vertical-align:top;">
+
+                        <div>
+                            Date:
+                            <span t-esc="p.date_done or p.scheduled_date"
+                                  t-options="{'widget':'date'}"/>
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <!-- ================= ITEMS ================= -->
+
+            <table style="width:100%;
+                          border-collapse:collapse;
+                          margin-top:8px;
+                          border-top:1px solid #000;
+                          border-bottom:1px solid #000;">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width:15%; text-align:center;">
+                            Qty
+                        </th>
+
+                        <th style="width:15%; text-align:center;">
+                            Unit
+                        </th>
+
+                        <th style="width:70%; text-align:left;">
+                            Description
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <!-- Actual Items -->
+                    <tr t-foreach="p.move_ids"
+                        t-as="line">
+
+                        <td style="text-align:center;">
+                            <span t-esc="line.product_uom_qty"/>
+                        </td>
+
+                        <td style="text-align:center;">
+                            <span t-esc="line.product_uom.name"/>
+                        </td>
+
+                        <td>
+                            <span t-esc="line.product_id.display_name"/>
+                        </td>
+
+                    </tr>
+
+                    <!-- Blank Rows -->
+                    <tr t-foreach="range(20 - len(p.move_ids))"
+                        t-as="i">
+
+                        <td style="height:20px;"></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <!-- ================= SIGNATURE ================= -->
+
+            <table style="width:100%; margin-top:0;">
+
+                <tr>
+
+                    <td style="width:50%;">
+
+                        Approved for delivery
+
+                    </td>
+
+                    <td style="width:50%;">
+
+                        <div>
+                            Received in good order and condition
+                        </div>
+
+                        <div style="margin-top:25px;">
+
+                            By:
+                            <span style="display:inline-block;
+                                         width:70%;
+                                         border-bottom:1px solid #000;">
+                            </span>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <div style="text-align:right;
+                        font-size:9px;
+                        font-weight:bold;
+                        margin-top:20px;">
+
+                THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT TAX
+
+            </div>
+
+        </div>
+
+    </template>
+
+</odoo>

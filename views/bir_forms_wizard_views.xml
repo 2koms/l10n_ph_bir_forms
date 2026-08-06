@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_bir_forms_wizard_form"
+            model="ir.ui.view">
+
+        <field name="name">bir.forms.wizard.form</field>
+        <field name="model">bir.forms.wizard</field>
+
+        <field name="arch" type="xml">
+
+            <form string="BIR Forms">
+
+                <group>
+
+                    <field name="form_type"/>
+
+                    <field name="generation_mode"/>
+
+                    <field name="print_type"/>
+
+                    <field name="company_id"/>
+
+                </group>
+
+                <group string="Single Document"
+                       invisible="generation_mode != 'single'">
+
+                    <field name="invoice_id"
+                           invisible="form_type != 'sales_invoice'"/>
+
+                    <field name="picking_id"
+                           invisible="form_type != 'delivery_receipt'"/>
+
+                    <field name="purchase_order_id"
+                           invisible="form_type != 'purchase_order'"/>
+
+                    <field name="credit_memo_id"
+                           invisible="form_type != 'credit_memo'"/>
+
+                    <field name="debit_memo_id"
+                           invisible="form_type != 'debit_memo'"/>
+
+                    <field name="payment_id"
+                           invisible="form_type != 'collection_receipt'"
+                           options="{'no_create': True, 'no_open': True}"/>
+
+                </group>
+
+                <group string="Batch Generation"
+                       invisible="generation_mode != 'batch'">
+
+                    <field name="date_from"/>
+
+                    <field name="date_to"/>
+
+                    <field name="partner_id"/>
+
+                </group>
+
+                <footer>
+
+                    <button name="action_generate"
+                            string="Generate"
+                            type="object"
+                            class="btn-primary"/>
+
+                    <button string="Cancel"
+                            special="cancel"/>
+
+                </footer>
+
+            </form>
+
+        </field>
+
+    </record>
+
+</odoo>

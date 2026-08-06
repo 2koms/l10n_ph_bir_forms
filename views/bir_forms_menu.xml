@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_bir_forms_wizard"
+            model="ir.actions.act_window">
+        <field name="name">BIR Forms</field>
+        <field name="res_model">bir.forms.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_bir_forms_root"
+        name="BIR Forms"
+        parent="account.menu_finance_reports"
+        sequence="110"/>
+
+    <menuitem
+        id="menu_bir_forms_generate"
+        name="Generate Forms"
+        parent="menu_bir_forms_root"
+        action="action_bir_forms_wizard"/>
+
+</odoo>

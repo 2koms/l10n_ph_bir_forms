@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sales_invoice_preprinted">
+
+        <t t-call="web.basic_layout">
+
+            <t t-foreach="docs_data" t-as="d">
+
+                <div class="page"
+                     style="position:relative;
+                            width:216mm;
+                            height:279mm;
+                            font-family:Arial, Helvetica, sans-serif;
+                            font-size:10px;">
+
+                    <!-- =========================
+                         CUSTOMER DETAILS
+                         ========================= -->
+
+                    <div style="position:absolute; top:33mm; left:22mm;">
+                        <span t-esc="d['customer_name']"/>
+                    </div>
+
+                    <div style="position:absolute; top:40mm; left:22mm;">
+                        <span t-esc="d['tin_no']"/>
+                    </div>
+
+                    <div style="position:absolute; top:47mm; left:22mm;">
+                        <t t-foreach="d['addr_lines']" t-as="addr">
+                            <span t-esc="addr"/>
+                            <t t-if="not addr_last">, </t>
+                        </t>
+                    </div>
+
+                    <!-- =========================
+                         INVOICE DETAILS
+                         ========================= -->
+
+                    <div style="position:absolute; top:33mm; left:158mm;">
+                        <span t-esc="d['invoice_date']"
+                              t-options="{'widget':'date'}"/>
+                    </div>
+
+                    <div style="position:absolute; top:40mm; left:158mm;">
+                        <span t-esc="d['customer_po']"/>
+                    </div>
+
+                    <div style="position:absolute; top:47mm; left:158mm;">
+                        <span t-esc="d['contact_no']"/>
+                    </div>
+
+                    <div style="position:absolute; top:54mm; left:158mm;">
+                        <span t-esc="d['term']"/>
+                    </div>
+
+                    <!-- =========================
+                         LINE ITEMS
+                         ========================= -->
+
+                    <t t-set="y" t-value="74"/>
+
+                    <t t-foreach="d['lines']" t-as="l">
+
+                        <div t-att-style="'position:absolute; top:%smm; left:8mm;' % y">
+                            <span t-esc="l['qty']"/>
+                        </div>
+
+                        <div t-att-style="'position:absolute; top:%smm; left:25mm;' % y">
+                            <span t-esc="l['part_no']"/>
+                        </div>
+
+                        <div t-att-style="'position:absolute; top:%smm; left:55mm;' % y">
+                            <span t-esc="l['uom']"/>
+                        </div>
+
+                        <div t-att-style="'position:absolute; top:%smm; left:75mm;' % y">
+                            <span t-esc="l['particulars']"/>
+                        </div>
+
+                        <div t-att-style="'position:absolute; top:%smm; left:155mm; text-align:right; width:20mm;' % y">
+                            <span t-esc="l['unit_cost']"
+                                  t-options="{'widget':'float','precision':2}"/>
+                        </div>
+
+                        <div t-att-style="'position:absolute; top:%smm; left:180mm; text-align:right; width:22mm;' % y">
+                            <span t-esc="l['amount']"
+                                  t-options="{'widget':'float','precision':2}"/>
+                        </div>
+
+                        <t t-set="y" t-value="y + 7"/>
+
+                    </t>
+
+                    <!-- =========================
+                         TOTALS
+                         ========================= -->
+
+                    <div style="position:absolute; top:206mm; left:182mm; width:22mm; text-align:right;">
+                        <span t-esc="d['total_amount']"
+                              t-options="{'widget':'float','precision':2}"/>
+                    </div>
+
+                    <div style="position:absolute; top:214mm; left:182mm; width:22mm; text-align:right;">
+                        <span t-esc="d['vat_amount']"
+                              t-options="{'widget':'float','precision':2}"/>
+                    </div>
+
+                    <div style="position:absolute; top:222mm; left:182mm; width:22mm; text-align:right;">
+                        <span t-esc="d['total_amount_due']"
+                              t-options="{'widget':'float','precision':2}"/>
+                    </div>
+
+                </div>
+
+            </t>
+
+        </t>
+
+    </template>
+
+</odoo>

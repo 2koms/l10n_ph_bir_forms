@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="collection_receipt_preprinted">
+
+        <t t-call="web.html_container">
+
+            <t t-foreach="docs_data" t-as="d">
+
+                <div class="page"
+                     style="
+                        position:relative;
+                        width:210mm;
+                        height:297mm;
+                        font-family:Arial, Helvetica, sans-serif;
+                        font-size:10pt;">
+
+                   
+
+                    <!-- ========================================== -->
+                    <!-- RECEIPT -->
+                    <!-- ========================================== -->
+
+                    <div style="position:absolute; top:18mm; right:18mm;">
+
+                        <div>
+
+                            <span t-esc="d['receipt_no']"/>
+
+                        </div>
+
+                        <div style="margin-top:8mm;">
+
+                            <span t-esc="d['receipt_date']"
+                                t-options="{'widget':'date'}"/>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- CUSTOMER -->
+                    <!-- ========================================== -->
+
+                    <div style="position:absolute; top:52mm; left:15mm; width:180mm;">
+
+                        <table style="width:100%;">
+
+                            <tr>
+
+                                <td style="width:60%;">
+
+                                    <span t-esc="d['customer_name']"/>
+
+                                </td>
+
+                                <td>
+
+                                    <span t-esc="d['customer_tin']"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td colspan="2">
+
+                                    <span t-esc="d['customer_address']"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td colspan="2">
+
+                                    <span t-esc="d['customer_business_style']"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td colspan="2">
+
+                                    <span t-esc="d['amount_in_words']"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>
+
+                                    <span t-esc="'{:,.2f}'.format(d['amount'])"/>
+
+                                </td>
+
+                                <td>
+
+                                    <span t-esc="d['payment_reference']"/>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- PAYMENT METHOD -->
+                    <!-- ========================================== -->
+
+                    <div style="
+                        position:absolute;
+                        top:105mm;
+                        left:15mm;">
+
+                        <div>
+
+                            <span t-if="d['is_cash']">X</span>
+
+                        </div>
+
+                        <div style="margin-top:3mm;">
+
+                            <span t-if="d['is_check']">X</span>
+
+                            <span style="margin-left:10mm;">
+                                <span t-esc="d['check_number']"/>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TOTALS -->
+                    <!-- ========================================== -->
+
+                    <div style="
+                        position:absolute;
+                        top:122mm;
+                        right:15mm;
+                        width:75mm;">
+
+                        <table style="
+                            width:100%;
+                            border-collapse:collapse;
+                            font-size:10pt;">
+
+                            <tr>
+
+                                <td style="width:65%;"></td>
+
+                                <td style="text-align:right;">
+
+                                    <span t-esc="'{:,.2f}'.format(d['total_amount_payable'])"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td></td>
+
+                                <td style="text-align:right;">
+
+                                    <span t-esc="'{:,.2f}'.format(d['withholding_tax'])"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td></td>
+
+                                <td style="text-align:right;">
+
+                                    <strong>
+                                        <span t-esc="'{:,.2f}'.format(d['collectible_amount'])"/>
+                                    </strong>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- CASHIER / AUTHORIZED REPRESENTATIVE -->
+                    <!-- ========================================== -->
+
+                    <div style="
+                        position:absolute;
+                        top:150mm;
+                        right:18mm;
+                        width:80mm;
+                        text-align:center;">
+
+                        <span t-esc="d['authorized_representative']"/>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- PAYMENT DISTRIBUTION -->
+                    <!-- ========================================== -->
+
+                    <div style="
+                        position:absolute;
+                        top:180mm;
+                        left:12mm;
+                        width:186mm;">
+
+                        <table style="
+                            width:100%;
+                            border-collapse:collapse;
+                            font-size:9pt;">
+
+                            <t t-foreach="d['invoice_lines']" t-as="line">
+
+                                <tr style="height:7mm;">
+
+                                    <td style="width:35%;">
+
+                                        <span t-esc="line['invoice_no']"/>
+
+                                    </td>
+
+                                    <td style="width:20%; text-align:center;">
+
+                                        <span t-esc="line['invoice_date']"
+                                              t-options="{'widget':'date'}"/>
+
+                                    </td>
+
+                                    <td style="width:25%; text-align:right;">
+
+                                        <span t-esc="'{:,.2f}'.format(line['amount'])"/>
+
+                                    </td>
+
+                                    <td style="width:20%; text-align:right;">
+
+                                        <span t-esc="'{:,.2f}'.format(line['withholding_tax'])"/>
+
+                                    </td>
+
+                                </tr>
+
+                            </t>
+
+                        </table>
+
+                    </div>
+
+                   
+
+                </div>
+
+            </t>
+
+        </t>
+
+    </template>
+
+</odoo>

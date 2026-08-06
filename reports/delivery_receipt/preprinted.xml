@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="delivery_receipt_preprinted">
+
+        <div class="page"
+             style="position:relative;
+                    width:210mm;
+                    height:297mm;
+                    font-family:Arial;
+                    font-size:10px;">
+
+            <t t-set="p" t-value="docs[0]"/>
+            <t t-set="partner" t-value="p.partner_id"/>
+
+            <!-- ===================== -->
+            <!-- HEADER -->
+            <!-- ===================== -->
+
+            <!-- DR Number -->
+            <div style="
+                position:absolute;
+                top:18mm;
+                left:160mm;
+                width:35mm;
+                text-align:left;">
+
+                <span t-esc="p.name"/>
+
+            </div>
+
+            <!-- Date -->
+            <div style="
+                position:absolute;
+                top:48mm;
+                left:170mm;">
+
+                <span t-esc="p.date_done or p.scheduled_date"
+                      t-options="{'widget':'date'}"/>
+
+            </div>
+
+            <!-- Terms -->
+            <div style="
+                position:absolute;
+                top:55mm;
+                left:170mm;">
+
+                <span t-esc="''"/>
+
+            </div>
+
+            <!-- ===================== -->
+            <!-- CUSTOMER -->
+            <!-- ===================== -->
+
+            <!-- Delivered To -->
+            <div style="
+                position:absolute;
+                top:48mm;
+                left:30mm;
+                width:90mm;">
+
+                <span t-esc="partner.name"/>
+
+            </div>
+
+            <!-- TIN -->
+            <div style="
+                position:absolute;
+                top:55mm;
+                left:30mm;">
+
+                <span t-esc="partner.vat or ''"/>
+
+            </div>
+
+            <!-- Address -->
+            <div style="
+                position:absolute;
+                top:62mm;
+                left:30mm;
+                width:90mm;">
+
+                <span t-esc="partner.contact_address or ''"/>
+
+            </div>
+
+            <!-- ===================== -->
+            <!-- ITEMS -->
+            <!-- ===================== -->
+
+            <t t-set="y" t-value="82"/>
+
+            <t t-foreach="p.move_ids" t-as="line">
+
+                <div t-att-style="'position:absolute; top:%smm; left:18mm; width:20mm; text-align:center;' % y">
+                    <span t-esc="line.product_uom_qty"/>
+                </div>
+
+                <div t-att-style="'position:absolute; top:%smm; left:48mm; width:20mm; text-align:center;' % y">
+                    <span t-esc="line.product_uom.name"/>
+                </div>
+
+                <div t-att-style="'position:absolute; top:%smm; left:70mm; width:120mm;' % y">
+                    <span t-esc="line.product_id.display_name"/>
+                </div>
+
+                <t t-set="y" t-value="y + 7"/>
+
+            </t>
+
+        </div>
+
+    </template>
+
+</odoo>
