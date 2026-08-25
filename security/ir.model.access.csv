@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bir_forms_wizard,bir.forms.wizard,model_bir_forms_wizard,base.group_user,1,1,1,1
+access_statement_of_account_wizard,statement.of.account.wizard,model_statement_of_account_wizard,base.group_user,1,1,1,1

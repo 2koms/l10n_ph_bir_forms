@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Main Statement of Account Report                           -->
+    <!-- ========================================================== -->
+
+    <template id="soa">
+
+        <t t-call="web.html_container">
+
+            <!-- ================================================== -->
+            <!-- WITH HEADER                                        -->
+            <!--                                                    -->
+            <!-- Uses Odoo's external layout, including the        -->
+            <!-- configured company letterhead/header/footer.      -->
+            <!-- ================================================== -->
+
+            <t t-if="print_header == 'with_header'">
+
+                <t t-call="web.external_layout">
+
+                    <t t-call="l10n_ph_bir_forms.soa_body"/>
+
+                </t>
+
+            </t>
+
+
+            <!-- ================================================== -->
+            <!-- WITHOUT HEADER                                     -->
+            <!--                                                    -->
+            <!-- Uses Odoo's basic report layout instead of the     -->
+            <!-- external company letterhead.                      -->
+            <!--                                                    -->
+            <!-- The same SOA body is rendered, so the report      -->
+            <!-- content and formatting remain identical.          -->
+            <!-- ================================================== -->
+
+            <t t-else="">
+
+                <t t-call="web.basic_layout">
+
+                    <t t-call="l10n_ph_bir_forms.soa_body"/>
+
+                </t>
+
+            </t>
+
+        </t>
+
+    </template>
+
+
+    <!-- ========================================================== -->
+    <!-- Reusable Statement of Account Body                        -->
+    <!-- ========================================================== -->
+
+    <template id="soa_body">
+
+        <!-- ====================================================== -->
+        <!-- Report Title                                           -->
+        <!-- ====================================================== -->
+
+        <h2 class="text-center">
+            Statement of Account
+        </h2>
+
+        <br/>
+
+
+        <!-- ====================================================== -->
+        <!-- Statement Information                                  -->
+        <!-- ====================================================== -->
+
+        <table class="table table-sm table-borderless">
+
+            <tr>
+
+                <td width="20%">
+                    <strong>Company</strong>
+                </td>
+
+                <td>
+                    <span t-esc="company.name"/>
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Customer</strong>
+                </td>
+
+                <td>
+                    <span t-esc="partner.name"/>
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Statement Date</strong>
+                </td>
+
+                <td>
+                    <span t-esc="statement_date"/>
+                </td>
+
+            </tr>
+
+
+            <tr t-if="date_from">
+
+                <td>
+                    <strong>Date From</strong>
+                </td>
+
+                <td>
+                    <span t-esc="date_from"/>
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Statement Type</strong>
+                </td>
+
+                <td>
+
+                    <t t-if="statement_type == 'outstanding'">
+                        Outstanding Statement
+                    </t>
+
+                    <t t-elif="statement_type == 'full'">
+                        Full Statement
+                    </t>
+
+                </td>
+
+            </tr>
+
+        </table>
+
+        <br/>
+
+
+        <!-- ====================================================== -->
+        <!-- Opening Balance                                        -->
+        <!-- ====================================================== -->
+
+        <table class="table table-sm table-bordered">
+
+            <tbody>
+
+                <tr>
+
+                    <td colspan="8">
+
+                        <strong>
+                            Opening Balance
+                        </strong>
+
+                    </td>
+
+                    <td class="text-end">
+
+                        <strong>
+
+                            <span
+                                t-esc="'{:,.2f}'.format(opening_balance)"
+                            />
+
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <br/>
+
+
+        <!-- ====================================================== -->
+        <!-- Transactions                                           -->
+        <!-- ====================================================== -->
+
+        <table class="table table-sm table-bordered">
+
+            <thead>
+
+                <tr>
+
+                    <!-- Date -->
+
+                    <th class="text-start">
+                        Date
+                    </th>
+
+
+                    <!-- Invoice Number -->
+
+                    <th class="text-start">
+                        INV #
+                    </th>
+
+
+                    <!-- Sales Order Number -->
+
+                    <th class="text-start">
+                        SO #
+                    </th>
+
+
+                    <!-- Purchase Order -->
+
+                    <th class="text-start">
+                        PO
+                    </th>
+
+
+                    <!-- Official Receipt -->
+
+                    <th class="text-start">
+                        OR #
+                    </th>
+
+
+                    <!-- Payment Date -->
+
+                    <th class="text-start">
+                        Payment Date
+                    </th>
+
+
+                    <!-- Debit -->
+
+                    <th class="text-end">
+                        Debit
+                    </th>
+
+
+                    <!-- Credit -->
+
+                    <th class="text-end">
+                        Credit
+                    </th>
+
+
+                    <!-- Balance -->
+
+                    <th class="text-end">
+                        Balance
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <t t-if="lines">
+
+                    <t t-foreach="lines" t-as="line">
+
+                        <tr>
+
+                            <!-- ================================== -->
+                            <!-- Date                               -->
+                            <!-- ================================== -->
+
+                            <td class="text-start">
+
+                                <span
+                                    t-esc="line['date']"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Invoice Number                     -->
+                            <!-- ================================== -->
+
+                            <td class="text-start">
+
+                                <span
+                                    t-esc="line['invoice_number']"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Sales Order Number                 -->
+                            <!-- ================================== -->
+
+                            <td class="text-start">
+
+                                <span
+                                    t-esc="line['sales_order_number']"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Purchase Order                     -->
+                            <!-- ================================== -->
+
+                            <td class="text-start">
+
+                                <span
+                                    t-esc="line['description']"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Official Receipt                    -->
+                            <!-- ================================== -->
+
+                            <td class="text-start">
+
+                                <span
+                                    t-esc="line['official_receipt_no']"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Payment Date                        -->
+                            <!-- ================================== -->
+
+                            <td class="text-start">
+
+                                <span
+                                    t-esc="line['payment_date'] or ''"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Debit                               -->
+                            <!-- ================================== -->
+
+                            <td class="text-end">
+
+                                <span
+                                    t-esc="'{:,.2f}'.format(line['debit'])"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Credit                              -->
+                            <!-- ================================== -->
+
+                            <td class="text-end">
+
+                                <span
+                                    t-esc="'{:,.2f}'.format(line['credit'])"
+                                />
+
+                            </td>
+
+
+                            <!-- ================================== -->
+                            <!-- Balance                             -->
+                            <!-- ================================== -->
+
+                            <td class="text-end">
+
+                                <span
+                                    t-esc="'{:,.2f}'.format(line['balance'])"
+                                />
+
+                            </td>
+
+                        </tr>
+
+                    </t>
+
+                </t>
+
+
+                <!-- ================================================== -->
+                <!-- No Transactions                                   -->
+                <!-- ================================================== -->
+
+                <t t-if="not lines">
+
+                    <tr>
+
+                        <td
+                            colspan="9"
+                            class="text-center"
+                        >
+
+                            No transactions found.
+
+                        </td>
+
+                    </tr>
+
+                </t>
+
+            </tbody>
+
+
+            <!-- ====================================================== -->
+            <!-- Totals                                                 -->
+            <!-- ====================================================== -->
+
+            <tfoot>
+
+                <!-- ================================================== -->
+                <!-- Total Debit                                        -->
+                <!-- ================================================== -->
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="text-end"
+                    >
+
+                        <strong>
+                            Total Debit
+                        </strong>
+
+                    </td>
+
+                    <td class="text-end">
+
+                        <strong>
+
+                            <span
+                                t-esc="'{:,.2f}'.format(total_debit)"
+                            />
+
+                        </strong>
+
+                    </td>
+
+                    <td/>
+                    <td/>
+
+                </tr>
+
+
+                <!-- ================================================== -->
+                <!-- Total Credit                                       -->
+                <!-- ================================================== -->
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="text-end"
+                    >
+
+                        <strong>
+                            Total Credit
+                        </strong>
+
+                    </td>
+
+                    <td class="text-end">
+
+                        <strong>
+
+                            <span
+                                t-esc="'{:,.2f}'.format(total_credit)"
+                            />
+
+                        </strong>
+
+                    </td>
+
+                    <td/>
+
+                </tr>
+
+
+                <!-- ================================================== -->
+                <!-- Closing Balance                                    -->
+                <!-- ================================================== -->
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="text-end"
+                    >
+
+                        <strong>
+                            Closing Balance
+                        </strong>
+
+                    </td>
+
+                    <td class="text-end">
+
+                        <strong>
+
+                            <span
+                                t-esc="'{:,.2f}'.format(closing_balance)"
+                            />
+
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+            </tfoot>
+
+        </table>
+
+    </template>
+
+</odoo>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sales_invoice_preprinted">
+
+        <t t-call="web.basic_layout">
+
+            <t t-foreach="docs_data" t-as="d">
+
+                <div class="page"
+                     style="
+                        position:relative;
+                        width:216mm;
+                        height:279mm;
+                        font-family:Arial, Helvetica, sans-serif;
+                        font-size:10px;
+                        color:#000;
+                     ">
+
+                    <!-- =====================================================
+                         CUSTOMER DETAILS
+                         ===================================================== -->
+
+                    <!-- Customer Name -->
+                    <div style="
+                        position:absolute;
+                        top:33mm;
+                        left:22mm;
+                        width:125mm;
+                        white-space:nowrap;
+                        overflow:hidden;
+                    ">
+                        <span t-esc="d.get('customer_name', '')"/>
+                    </div>
+
+                    <!-- TIN -->
+                    <div style="
+                        position:absolute;
+                        top:40mm;
+                        left:22mm;
+                        width:80mm;
+                        white-space:nowrap;
+                        overflow:hidden;
+                    ">
+                        <span t-esc="d.get('tin_no', '')"/>
+                    </div>
+
+                    <!-- Address -->
+                    <div style="
+                        position:absolute;
+                        top:47mm;
+                        left:22mm;
+                        width:125mm;
+                    ">
+                        <t t-foreach="d.get('addr_lines', [])" t-as="addr">
+
+                            <span t-esc="addr"/>
+
+                            <t t-if="not addr_last">
+                                ,
+                            </t>
+
+                        </t>
+                    </div>
+
+
+                    <!-- =====================================================
+                         INVOICE DETAILS
+                         ===================================================== -->
+
+                    <!-- Invoice Date -->
+                    <div style="
+                        position:absolute;
+                        top:33mm;
+                        left:158mm;
+                        width:45mm;
+                        white-space:nowrap;
+                    ">
+                        <span t-esc="d.get('invoice_date', '')"
+                              t-options="{'widget':'date'}"/>
+                    </div>
+
+                    <!-- Customer PO -->
+                    <div style="
+                        position:absolute;
+                        top:40mm;
+                        left:158mm;
+                        width:45mm;
+                        white-space:nowrap;
+                        overflow:hidden;
+                    ">
+                        <span t-esc="d.get('customer_po', '')"/>
+                    </div>
+
+                    <!-- Contact Number -->
+                    <div style="
+                        position:absolute;
+                        top:47mm;
+                        left:158mm;
+                        width:45mm;
+                        white-space:nowrap;
+                        overflow:hidden;
+                    ">
+                        <span t-esc="d.get('contact_no', '')"/>
+                    </div>
+
+                    <!-- Payment Terms -->
+                    <div style="
+                        position:absolute;
+                        top:54mm;
+                        left:158mm;
+                        width:45mm;
+                        white-space:nowrap;
+                        overflow:hidden;
+                    ">
+                        <span t-esc="d.get('term', '')"/>
+                    </div>
+
+
+                    <!-- =====================================================
+                         LINE ITEMS
+                         ===================================================== -->
+
+                    <t t-set="y" t-value="74"/>
+
+                    <t t-foreach="d.get('lines', [])" t-as="l">
+
+                        <!-- Quantity -->
+                        <div t-att-style="
+                            'position:absolute;
+                             top:%smm;
+                             left:8mm;
+                             width:14mm;
+                             text-align:center;
+                             white-space:nowrap;' % y
+                        ">
+                            <span t-esc="l.get('qty', '')"/>
+                        </div>
+
+                        <!-- Part Number -->
+                        <div t-att-style="
+                            'position:absolute;
+                             top:%smm;
+                             left:25mm;
+                             width:28mm;
+                             white-space:nowrap;
+                             overflow:hidden;' % y
+                        ">
+                            <span t-esc="l.get('part_no', '')"/>
+                        </div>
+
+                        <!-- Unit -->
+                        <div t-att-style="
+                            'position:absolute;
+                             top:%smm;
+                             left:55mm;
+                             width:15mm;
+                             text-align:center;
+                             white-space:nowrap;' % y
+                        ">
+                            <span t-esc="l.get('uom', '')"/>
+                        </div>
+
+                        <!-- Particulars -->
+                        <div t-att-style="
+                            'position:absolute;
+                             top:%smm;
+                             left:75mm;
+                             width:75mm;
+                             white-space:nowrap;
+                             overflow:hidden;' % y
+                        ">
+                            <span t-esc="l.get('particulars', '')"/>
+                        </div>
+
+                        <!-- Unit Cost -->
+                        <div t-att-style="
+                            'position:absolute;
+                             top:%smm;
+                             left:155mm;
+                             width:20mm;
+                             text-align:right;
+                             white-space:nowrap;' % y
+                        ">
+                            <span t-esc="l.get('unit_cost', 0.0)"
+                                  t-options="{'widget':'float','precision':2}"/>
+                        </div>
+
+                        <!-- Amount -->
+                        <div t-att-style="
+                            'position:absolute;
+                             top:%smm;
+                             left:180mm;
+                             width:22mm;
+                             text-align:right;
+                             white-space:nowrap;' % y
+                        ">
+                            <span t-esc="l.get('amount', 0.0)"
+                                  t-options="{'widget':'float','precision':2}"/>
+                        </div>
+
+                        <!-- Next Line -->
+                        <t t-set="y" t-value="y + 7"/>
+
+                    </t>
+
+
+                    <!-- =====================================================
+                         PERIOD COVERED
+                         ===================================================== -->
+
+                    <!--
+                        The label "Period Covered:" already exists on the
+                        preprinted form, so ONLY the value is printed here.
+                    -->
+
+                    <div style="
+                        position:absolute;
+                        top:132mm;
+                        left:75mm;
+                        width:75mm;
+                        white-space:nowrap;
+                        overflow:hidden;
+                    ">
+                        <span t-esc="d.get('period_covered', '')"/>
+                    </div>
+
+
+                    <!-- =====================================================
+                         REMARKS
+                         ===================================================== -->
+
+                    <!--
+                        The label "Remarks:" already exists on the
+                        preprinted form, so ONLY the value is printed here.
+                    -->
+
+                    <div style="
+                        position:absolute;
+                        top:139mm;
+                        left:75mm;
+                        width:125mm;
+                        white-space:nowrap;
+                        overflow:hidden;
+                    ">
+                        <span t-esc="d.get('invoice_remarks', '')"/>
+                    </div>
+
+
+                    <!-- =====================================================
+                         TOTALS
+                         ===================================================== -->
+
+                    <!-- Total Amount -->
+                    <div style="
+                        position:absolute;
+                        top:206mm;
+                        left:182mm;
+                        width:22mm;
+                        text-align:right;
+                        white-space:nowrap;
+                    ">
+                        <span t-esc="d.get('total_amount', 0.0)"
+                              t-options="{'widget':'float','precision':2}"/>
+                    </div>
+
+                    <!-- VAT -->
+                    <div style="
+                        position:absolute;
+                        top:214mm;
+                        left:182mm;
+                        width:22mm;
+                        text-align:right;
+                        white-space:nowrap;
+                    ">
+                        <span t-esc="d.get('vat_amount', 0.0)"
+                              t-options="{'widget':'float','precision':2}"/>
+                    </div>
+
+                    <!-- Total Amount Due -->
+                    <div style="
+                        position:absolute;
+                        top:222mm;
+                        left:182mm;
+                        width:22mm;
+                        text-align:right;
+                        white-space:nowrap;
+                    ">
+                        <span t-esc="d.get('total_amount_due', 0.0)"
+                              t-options="{'widget':'float','precision':2}"/>
+                    </div>
+
+                </div>
+
+            </t>
+
+        </t>
+
+    </template>
+
+</odoo>

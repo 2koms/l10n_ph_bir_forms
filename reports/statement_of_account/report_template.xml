@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="statement_of_account">
+
+        <t t-call="web.html_container">
+
+            <t t-call="l10n_ph_bir_forms.soa"/>
+
+        </t>
+
+    </template>
+
+</odoo>

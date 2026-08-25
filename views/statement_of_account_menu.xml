@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Statement of Account Menu -->
+    <menuitem
+        id="menu_statement_of_account"
+        name="Statement of Account"
+        parent="account.account_reports_partners_reports_menu"
+        action="action_statement_of_account_wizard"
+        sequence="40"/>
+
+</odoo>

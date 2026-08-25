@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="delivery_receipt_computerized">
+
+        <div class="page"
+             style="
+                position:relative;
+                box-sizing:border-box;
+                min-height:277mm;
+                padding-bottom:42mm;
+                font-family:Arial, Helvetica, sans-serif;
+                font-size:10px;
+                line-height:1.25;
+                color:#000;
+             ">
+
+            <!-- ========================================================= -->
+            <!-- DATA                                                       -->
+            <!-- ========================================================= -->
+
+            <t t-set="p" t-value="docs[0]"/>
+            <t t-set="company" t-value="p.company_id"/>
+            <t t-set="cp" t-value="company.partner_id"/>
+            <t t-set="partner" t-value="p.partner_id"/>
+
+
+            <!-- ========================================================= -->
+            <!-- HEADER                                                      -->
+            <!-- ========================================================= -->
+
+            <table style="
+                width:100%;
+                border-collapse:collapse;
+                table-layout:fixed;
+            ">
+
+                <tr>
+
+                    <!-- COMPANY -->
+
+                    <td style="
+                        width:32%;
+                        vertical-align:top;
+                        padding:3px 4px 8px 4px;
+                    ">
+
+                        <img t-if="company.logo"
+                             t-att-src="image_data_uri(company.logo)"
+                             style="
+                                max-height:42px;
+                                max-width:180px;
+                                display:block;
+                                margin-bottom:4px;
+                             "/>
+
+                        <div style="
+                            font-size:14px;
+                            font-weight:bold;
+                            line-height:1.15;
+                        ">
+                            <span t-esc="company.name"/>
+                        </div>
+
+                        <div>
+                            Tel No. :
+                            <span t-esc="cp.phone or ''"/>
+                        </div>
+
+                        <div>
+                            Mobile No. :
+                            <span t-esc="
+                                (
+                                    cp.mobile
+                                    if 'mobile' in cp._fields
+                                    else ''
+                                ) or ''
+                            "/>
+                        </div>
+
+                        <div>
+                            VAT REG. TIN :
+                            <span t-esc="cp.vat or ''"/>
+                        </div>
+
+                    </td>
+
+
+                    <!-- CENTER TITLE -->
+
+                    <td style="
+                        width:43%;
+                        vertical-align:middle;
+                        text-align:center;
+                        padding:8px 4px 4px 4px;
+                    ">
+
+                        <div style="
+                            font-size:20px;
+                            font-weight:bold;
+                            line-height:1.2;
+                            white-space:nowrap;
+                        ">
+                            DELIVERY RECEIPT
+                        </div>
+
+                    </td>
+
+
+                    <!-- DR NUMBER -->
+
+                    <td style="
+                        width:25%;
+                        vertical-align:bottom;
+                        text-align:right;
+                        padding:8px 4px 9px 4px;
+                    ">
+
+                        <div style="
+                            font-size:12px;
+                            font-weight:bold;
+                            white-space:nowrap;
+                        ">
+
+                            No. :
+                            <span t-esc="p.name"/>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <!-- ========================================================= -->
+            <!-- HEADER SEPARATOR                                           -->
+            <!-- ========================================================= -->
+
+            <div style="
+                border-top:1px solid #000;
+                margin-top:3px;
+            ">
+            </div>
+
+
+            <!-- ========================================================= -->
+            <!-- CUSTOMER / DELIVERY INFORMATION                            -->
+            <!-- ========================================================= -->
+
+            <table style="
+                width:100%;
+                border-collapse:collapse;
+                margin-top:11px;
+            ">
+
+                <tr>
+
+                    <td style="
+                        width:55%;
+                        vertical-align:top;
+                        padding:0 4px;
+                    ">
+
+                        <div style="margin-bottom:4px;">
+
+                            <strong>Delivered to:</strong>
+
+                            <span t-esc="partner.name or ''"/>
+
+                        </div>
+
+                        <div style="margin-bottom:4px;">
+
+                            <strong>TIN:</strong>
+
+                            <span t-esc="partner.vat or ''"/>
+
+                        </div>
+
+                        <div>
+
+                            <strong>Address:</strong>
+
+                            <span t-esc="partner.contact_address or ''"/>
+
+                        </div>
+
+                    </td>
+
+
+                    <td style="
+                        width:45%;
+                        vertical-align:top;
+                        padding:0 4px;
+                    ">
+
+                        <div>
+
+                            <strong>Date:</strong>
+
+                            <span t-esc="
+                                p.date_done or p.scheduled_date
+                            "
+                            t-options="{'widget':'date'}"/>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <!-- ========================================================= -->
+            <!-- ITEMS                                                       -->
+            <!-- ========================================================= -->
+
+            <table style="
+                width:100%;
+                border-collapse:collapse;
+                margin-top:11px;
+                border-top:1px solid #000;
+                height:150mm;
+                table-layout:fixed;
+            ">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="
+                            width:15%;
+                            text-align:center;
+                            padding:6px 3px 5px 3px;
+                            font-weight:bold;
+                            vertical-align:top;
+                        ">
+                            Qty
+                        </th>
+
+                        <th style="
+                            width:15%;
+                            text-align:center;
+                            padding:6px 3px 5px 3px;
+                            font-weight:bold;
+                            vertical-align:top;
+                        ">
+                            Unit
+                        </th>
+
+                        <th style="
+                            width:70%;
+                            text-align:left;
+                            padding:6px 3px 5px 3px;
+                            font-weight:bold;
+                            vertical-align:top;
+                        ">
+                            Description
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr t-foreach="p.move_ids"
+                        t-as="line">
+
+                        <td style="
+                            text-align:center;
+                            padding:4px 3px;
+                            vertical-align:top;
+                        ">
+
+                            <span t-esc="
+                                line.quantity or line.product_uom_qty
+                            "/>
+
+                        </td>
+
+                        <td style="
+                            text-align:center;
+                            padding:4px 3px;
+                            vertical-align:top;
+                        ">
+
+                            <span t-esc="line.product_uom.name"/>
+
+                        </td>
+
+                        <td style="
+                            text-align:left;
+                            padding:4px 3px;
+                            vertical-align:top;
+                        ">
+
+                            <span t-esc="line.product_id.display_name"/>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <!-- ========================================================= -->
+            <!-- DOCUMENT FOOTER                                            -->
+            <!-- ========================================================= -->
+
+            <div class="delivery-receipt-footer"
+                 style="
+                    position:absolute;
+                    left:0;
+                    right:0;
+                    bottom:0;
+                    width:100%;
+                    font-size:9.5px;
+                    line-height:1.2;
+                    page-break-inside:avoid;
+                 ">
+
+                <!-- ===================================================== -->
+                <!-- FOOTER LINE                                             -->
+                <!-- ===================================================== -->
+
+                <table style="
+                    width:100%;
+                    border-collapse:collapse;
+                    border-top:1px solid #000;
+                ">
+
+                    <tr>
+
+                        <!-- APPROVED -->
+
+                        <td style="
+                            width:50%;
+                            vertical-align:top;
+                            padding:8px 4px 4px 4px;
+                        ">
+
+                            <div style="
+                                font-weight:bold;
+                            ">
+                                Approved for delivery
+                            </div>
+
+                        </td>
+
+
+                        <!-- RECEIVED -->
+
+                        <td style="
+                            width:50%;
+                            vertical-align:top;
+                            padding:8px 4px 4px 4px;
+                        ">
+
+                            <div style="
+                                font-weight:bold;
+                                text-align:center;
+                            ">
+                                Received in good order and condition
+                            </div>
+
+
+                            <div style="
+                                margin-top:13px;
+                            ">
+
+                                <strong>By:</strong>
+
+                                <span style="
+                                    display:inline-block;
+                                    width:72%;
+                                    border-bottom:1px solid #000;
+                                    height:12px;
+                                    vertical-align:bottom;
+                                ">
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+                <!-- ===================================================== -->
+                <!-- TAX NOTICE                                              -->
+                <!-- ===================================================== -->
+
+                <div style="
+                    text-align:right;
+                    font-size:8px;
+                    font-weight:bold;
+                    margin-top:7px;
+                    padding-right:4px;
+                ">
+
+                    THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT TAX
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </template>
+
+</odoo>
