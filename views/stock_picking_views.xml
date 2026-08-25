@@ -15,8 +15,7 @@
 
         <field name="arch" type="xml">
 
-            <!-- Replace Odoo's standard Delivery Slip Print button -->
-            <xpath expr="//button[@name='483']"
+            <xpath expr="//button[@name='%(stock.action_report_delivery)d']"
                    position="replace">
 
                 <button name="%(l10n_ph_bir_forms.action_delivery_receipt_report)d"
