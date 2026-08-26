@@ -62,6 +62,19 @@
                             <span t-esc="company.name"/>
                         </div>
 
+                        <!-- Company Address - Dynamic -->
+                        <div>
+                            <span t-esc="cp.street or ''"/>
+                        </div>
+
+                        <div>
+                            <span t-esc="', '.join(filter(None, [
+                                cp.city,
+                                cp.state_id.name if cp.state_id else '',
+                                cp.country_id.name if cp.country_id else ''
+                            ]))"/>
+                        </div>
+
                         <div>
                             Tel No. :
                             <span t-esc="cp.phone or ''"/>
@@ -69,13 +82,7 @@
 
                         <div>
                             Mobile No. :
-                            <span t-esc="
-                                (
-                                    cp.mobile
-                                    if 'mobile' in cp._fields
-                                    else ''
-                                ) or ''
-                            "/>
+                            <span>0917-706-7977</span>
                         </div>
 
                         <div>
