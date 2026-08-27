@@ -133,7 +133,7 @@ class BirFormsWizard(models.TransientModel):
             ("company_id", "=", company_id),
             ("partner_type", "=", "customer"),
             ("payment_type", "=", "inbound"),
-            ("state", "=", "posted")
+            ("state", "=", "paid")
         ]
         """,
     )
@@ -219,7 +219,7 @@ class BirFormsWizard(models.TransientModel):
                 if (
                     payment.partner_type == "customer"
                     and payment.payment_type == "inbound"
-                    and payment.state == "posted"
+                    and payment.state == "paid"
                 ):
                     res.update({
                         "form_type": "collection_receipt",
